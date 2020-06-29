@@ -31,6 +31,7 @@ export const createRecord = ({
     id: createID(),
     lastRepetition: null,
     nextRepetition: null,
+    createdAt: new Date().toISOString(),
     iteration: 0,
   };
 };

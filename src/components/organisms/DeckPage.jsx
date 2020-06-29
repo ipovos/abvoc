@@ -74,9 +74,10 @@ export class DeckPage extends React.Component {
   onSearchKeyUp = (event) => {
     if (
       event.keyCode === 13 &&
-      this.getFilteredRecords().length === 0 &&
+      !this.state.hasValidationError &&
       this.state.query.length > 0 &&
-      !this.state.isRecordCreating
+      !this.state.isRecordCreating &&
+      this.getFilteredRecords().length === 0
     ) {
       this.startRecordCreating();
     }
@@ -90,16 +91,24 @@ export class DeckPage extends React.Component {
       return records;
     }
 
-    return records.filter((record) => {
-      return (
-        record.firstSide
-          .toLowerCase()
-          .includes(query.toLowerCase()) ||
-        record.secondSide
-          .toLowerCase()
-          .includes(query.toLowerCase())
-      );
-    });
+    return records
+      .filter((record) => {
+        return (
+          record.firstSide
+            .toLowerCase()
+            .includes(query.toLowerCase()) ||
+          record.secondSide
+            .toLowerCase()
+            .includes(query.toLowerCase())
+        );
+      })
+      .sort((a, b) => {
+        if (a.createrAt < b.createdAt) {
+          return 1;
+        }
+
+        return -1;
+      });
   };
 
   render() {

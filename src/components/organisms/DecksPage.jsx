@@ -62,6 +62,17 @@ export class DecksPage extends React.Component {
     });
   };
 
+  onSearchKeyUp = (event) => {
+    if (
+      event.keyCode === 13 &&
+      !this.state.hasValidationError &&
+      this.state.query.length > 0 &&
+      this.getFilteredDecks().length === 0
+    ) {
+      this.onDeckCreate();
+    }
+  };
+
   getFilteredDecks = () => {
     const { hasValidationError, query } = this.state;
     const { decks } = this.props;
@@ -104,6 +115,7 @@ export class DecksPage extends React.Component {
             caption="to search or create decks"
             value={query}
             onChange={this.onQueryChange}
+            onKeyUp={this.onSearchKeyUp}
             validationError={validationError}
           />
         </Tile>
