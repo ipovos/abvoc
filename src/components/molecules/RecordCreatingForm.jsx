@@ -13,10 +13,20 @@ export class RecordCreatingForm extends React.Component {
     };
   }
 
-  handleInputChange = (event) => {
+  onInputChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
     });
+  };
+
+  onInputKeyUp = (event) => {
+    if (
+      event.keyCode === 13 &&
+      this.state.firstSide.length > 0 &&
+      this.state.secondSide.length > 0
+    ) {
+      this.createRecord();
+    }
   };
 
   createRecord = () => {
@@ -47,7 +57,8 @@ export class RecordCreatingForm extends React.Component {
           name="firstSide"
           id="firstSide"
           value={firstSide}
-          onChange={this.handleInputChange}
+          onChange={this.onInputChange}
+          onKeyUp={this.onInputKeyUp}
         />
         <br />
         <label
@@ -62,7 +73,9 @@ export class RecordCreatingForm extends React.Component {
           name="secondSide"
           id="secondSide"
           value={secondSide}
-          onChange={this.handleInputChange}
+          onChange={this.onInputChange}
+          onKeyUp={this.onInputKeyUp}
+          autoFocus
         />
         <br />
         <div>

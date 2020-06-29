@@ -71,6 +71,17 @@ export class DeckPage extends React.Component {
     this.finishRecordCreating();
   };
 
+  onSearchKeyUp = (event) => {
+    if (
+      event.keyCode === 13 &&
+      this.getFilteredRecords().length === 0 &&
+      this.state.query.length > 0 &&
+      !this.state.isRecordCreating
+    ) {
+      this.startRecordCreating();
+    }
+  };
+
   getFilteredRecords = () => {
     const { hasValidationError, query } = this.state;
     const { records } = this.props;
@@ -140,6 +151,7 @@ export class DeckPage extends React.Component {
             value={query}
             onChange={this.onQueryChange}
             validationError={validationError}
+            onKeyUp={this.onSearchKeyUp}
           />
         </Tile>
 
