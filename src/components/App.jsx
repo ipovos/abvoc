@@ -7,7 +7,7 @@ import * as store from '../shared/store';
 
 export class App extends React.Component {
   state = {
-    page: 'decks',
+    page: 'train',
     pageParams: {
       deckId: '2',
     },
@@ -28,27 +28,27 @@ export class App extends React.Component {
   };
 
   render() {
+    const {
+      page,
+      pageParams,
+      appData,
+      decksById,
+    } = this.state;
     return (
       <>
-        {this.state.page === 'decks' && (
+        {page === 'decks' && (
           <DecksPage
-            router={{ params: this.state.pageParams }}
+            router={{ params: pageParams }}
             onPageChange={this.changePage}
-            appData={this.state.appData}
-            decks={Object.values(this.state.decksById)}
+            appData={appData}
+            decks={Object.values(decksById)}
           />
         )}
-        {this.state.page === 'deck' && (
+        {page === 'deck' && (
           <DeckPage
-            router={{ params: this.state.pageParams }}
-            deck={
-              this.state.decksById[
-                this.state.pageParams.deckId
-              ]
-            }
-            words={this.getWordsByDeckId(
-              this.state.pageParams.deckId,
-            )}
+            router={{ params: pageParams }}
+            deck={decksById[pageParams.deckId]}
+            words={this.getWordsByDeckId(pageParams.deckId)}
             onPageChange={this.changePage}
           />
         )}
