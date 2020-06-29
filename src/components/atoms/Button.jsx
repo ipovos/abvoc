@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { colors } from '../../shared/styles';
+
 export const Button = ({
   wide = false,
   type = 'button',
@@ -11,16 +13,17 @@ export const Button = ({
     width: wide ? '100%' : 'initial',
     fontSize: '1em',
     borderRadius: '1.3em',
-    border: '1px solid #8367C7',
+    border: `1px solid ${colors.violet}`,
+    color: colors.purple,
     padding: '0.65em 1.3em',
-    backgroundColor: 'hsl(269, 97%, 90%)',
+    backgroundColor: colors.violetLight,
+    cursor: 'pointer',
   };
 
   const purpleStyle = {
     padding: '1em',
     fontWeight: 700,
-    background:
-      'linear-gradient(30deg, rgba(86,3,173,1) 28%, rgba(131,103,199,1) 100%)',
+    background: `linear-gradient(30deg, ${colors.purple} 30%, ${colors.violet} 100%)`,
     color: '#fff',
     fontStyle: 'italic',
   };

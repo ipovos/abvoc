@@ -2,29 +2,52 @@ import React from 'react';
 
 import { Container } from '../atoms/Container';
 import { Tile } from '../atoms/Tile';
-import { Title } from '../atoms/Title';
 import { Button } from '../atoms/Button';
-import { ProgressBar } from '../atoms/ProgressBar';
+import { Mark } from '../atoms/Mark';
 
 import { SearchForm } from '../molecules/SearchForm';
 import { WordsList } from '../molecules/WordsList';
 
-import { calculatePercent } from '../../shared/utils';
+import { NotFoundTile } from '../molecules/NotFoundTile';
+import { DeckTile } from '../molecules/DeckTile';
 
 export class DeckPage extends React.Component {
   state = {
+    hasValidationError: false,
+    validationError: '',
     query: '',
   };
 
   onQueryChange = (event) => {
-    this.setState({ query: event.target.value });
+    const normalizedQuery = this.normalizeQuery(
+      event.target.value,
+    );
+    const hasValidationError = this.validateQuery(
+      normalizedQuery,
+    );
+
+    this.setState({
+      hasValidationError,
+      query: normalizedQuery,
+      validationError: hasValidationError
+        ? 'need more letters'
+        : '',
+    });
+  };
+
+  normalizeQuery = (rawQuery) => {
+    return rawQuery.trim();
+  };
+
+  validateQuery = (query) => {
+    return query.length > 0 && query.length < 2;
   };
 
   getFilteredWords = () => {
-    const { query } = this.state;
+    const { hasValidationError, query } = this.state;
     const { words } = this.props;
 
-    if (query.length < 2) {
+    if (hasValidationError) {
       return words;
     }
 
@@ -42,27 +65,18 @@ export class DeckPage extends React.Component {
 
   render() {
     const { deck } = this.props;
-    const { title, learnedWordsCount, wordsCount } = deck;
+    const { validationError, query } = this.state;
+    const filteredWords = this.getFilteredWords();
 
     return (
       <Container>
-        <Tile>
-          <Title>{title}</Title>
-          <ProgressBar
-            percent={calculatePercent(
-              learnedWordsCount,
-              wordsCount,
-            )}
-          />
-          <p>
-            {learnedWordsCount}/{wordsCount} words learned
-          </p>
-          <Button
-            onClick={() => this.props.onPageChange('decks')}
-          >
-            Back!
-          </Button>
-        </Tile>
+        <DeckTile
+          deck={deck}
+          pageChangeCaption="Back!"
+          onPageChange={() =>
+            this.props.onPageChange('decks')
+          }
+        />
         <p>
           <Button wide look="purple">
             train
@@ -71,13 +85,25 @@ export class DeckPage extends React.Component {
         <Tile>
           <SearchForm
             caption="to search words"
-            value={this.state.query}
+            value={query}
             onChange={this.onQueryChange}
+            validationError={validationError}
           />
         </Tile>
-        <Tile noPadding>
-          <WordsList list={this.getFilteredWords()} />
-        </Tile>
+        {filteredWords?.length > 0 ? (
+          <Tile noPadding>
+            <WordsList list={filteredWords} />
+          </Tile>
+        ) : (
+          <NotFoundTile
+            caption={
+              <>
+                oops, no “<Mark>{query}</Mark>
+                ”-containing words found
+              </>
+            }
+          />
+        )}
       </Container>
     );
   }

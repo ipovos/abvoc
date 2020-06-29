@@ -2,6 +2,8 @@ import React from 'react';
 
 import { Input } from '../atoms/Input';
 
+import { colors } from '../../shared/styles';
+
 export const SearchForm = ({
   caption,
   validationError,
@@ -20,7 +22,7 @@ export const SearchForm = ({
       />
       <br />
       {validationError?.length > 0 ? (
-        <div style={{ color: '#FD151B' }}>
+        <div style={{ color: colors.red }}>
           <i>{validationError}</i>
         </div>
       ) : (

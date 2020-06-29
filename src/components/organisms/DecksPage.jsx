@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Container } from '../atoms/Container';
 import { Tile } from '../atoms/Tile';
+import { Mark } from '../atoms/Mark';
 
 import { SearchForm } from '../molecules/SearchForm';
 import { AppTile } from '../molecules/AppTile';
@@ -45,8 +46,6 @@ export class DecksPage extends React.Component {
     const { decks } = this.props;
 
     if (hasValidationError) {
-      console.log('error');
-
       return decks;
     }
 
@@ -59,7 +58,7 @@ export class DecksPage extends React.Component {
 
   render() {
     const { appData, onPageChange } = this.props;
-    const { query, validationError } = this.state;
+    const { validationError, query } = this.state;
     const filteredDecks = this.getFilteredDecks();
 
     return (
@@ -78,6 +77,7 @@ export class DecksPage extends React.Component {
           <DeckTile
             key={deck.id}
             deck={deck}
+            pageChangeCaption="Go!"
             onPageChange={() =>
               onPageChange('deck', {
                 deckId: deck.id,
@@ -89,13 +89,8 @@ export class DecksPage extends React.Component {
           <NotFoundTile
             caption={
               <>
-                oops, no “
-                <mark
-                  style={{ backgroundColor: '#F3D34A' }}
-                >
-                  {query}
-                </mark>
-                ” decks found
+                oops, no “<Mark>{query}</Mark>
+                ”-containing decks found
               </>
             }
           />

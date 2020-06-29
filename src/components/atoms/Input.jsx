@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { colors } from '../../shared/styles';
+
 export const Input = ({ type = 'text', ...restProps }) => {
   return (
     <input
@@ -12,7 +14,7 @@ export const Input = ({ type = 'text', ...restProps }) => {
         fontSize: '1em',
         lineHeight: 2,
         border: 'none',
-        borderBottom: '1px solid #8367C7',
+        borderBottom: `1px solid ${colors.violet}`,
       }}
     />
   );

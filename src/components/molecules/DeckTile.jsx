@@ -7,7 +7,11 @@ import { Button } from '../atoms/Button';
 
 import { calculatePercent } from '../../shared/utils';
 
-export const DeckTile = ({ deck, onPageChange }) => {
+export const DeckTile = ({
+  deck,
+  pageChangeCaption,
+  onPageChange,
+}) => {
   const { title, wordsCount, learnedWordsCount } = deck;
 
   return (
@@ -23,7 +27,9 @@ export const DeckTile = ({ deck, onPageChange }) => {
         {learnedWordsCount}/{wordsCount} words learned
       </p>
       <p>Learning in progress</p>
-      <Button onClick={onPageChange}>Go!</Button>
+      <Button onClick={onPageChange}>
+        {pageChangeCaption}
+      </Button>
     </Tile>
   );
 };

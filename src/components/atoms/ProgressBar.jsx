@@ -1,18 +1,61 @@
 import React from 'react';
 
-export const ProgressBar = ({ percent }) => {
+import { colors } from '../../shared/styles';
+
+const getBackgroundColor = (percent, colored) => {
+  if (!colored) {
+    return colors.purpleLight;
+  }
+
+  if (percent < 33) {
+    return colors.redLight;
+  }
+
+  if (percent < 66) {
+    return colors.mustardLight;
+  }
+
+  return colors.greenLight;
+};
+
+const getProgressColor = (percent, colored) => {
+  if (!colored) {
+    return colors.purple;
+  }
+
+  if (percent < 33) {
+    return colors.red;
+  }
+
+  if (percent < 66) {
+    return colors.mustard;
+  }
+
+  return colors.green;
+};
+
+export const ProgressBar = ({
+  percent,
+  height = '2px',
+  colored = false,
+}) => {
   return (
     <div
       style={{
-        height: '2px',
-        backgroundColor: 'hsl(269, 97%, 90%)',
+        height,
+        backgroundColor: getBackgroundColor(
+          percent,
+          colored,
+        ),
       }}
     >
       <div
         style={{
-          height: '2px',
-          backgroundColor:
-            percent === 100 ? '#138A36' : '#5603AD',
+          height,
+          backgroundColor: getProgressColor(
+            percent,
+            colored,
+          ),
           width: `${Math.min(percent, 100)}%`,
         }}
       />

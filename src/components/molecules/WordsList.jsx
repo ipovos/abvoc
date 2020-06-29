@@ -2,6 +2,8 @@ import React from 'react';
 
 import { ProgressBar } from '../atoms/ProgressBar';
 
+import { colors } from '../../shared/styles';
+
 export const WordsList = (props) => {
   return (
     <ul
@@ -15,14 +17,14 @@ export const WordsList = (props) => {
             borderBottom:
               i === props.list.length - 1
                 ? null
-                : '1px solid #8367C7',
+                : `1px solid ${colors.violet}`,
           }}
         >
           <div>
             <p style={{ margin: 0, lineHeight: '1.5' }}>
               <b>{word.term}</b>
             </p>
-            <ProgressBar percent={0} />
+            <ProgressBar percent={20} />
             <p style={{ margin: 0, lineHeight: '1.5' }}>
               {word.definition}
             </p>
