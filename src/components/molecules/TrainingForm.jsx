@@ -76,6 +76,7 @@ export class TrainingForm extends React.Component {
           placeholder="type here..."
           value={value}
           onChange={this.handleValueChange}
+          autoFocus
           {...otherProps}
         />
         <br />

@@ -4,6 +4,7 @@ import { Container } from '../atoms/Container';
 import { Tile } from '../atoms/Tile';
 import { Title } from '../atoms/Title';
 import { ProgressBar } from '../atoms/ProgressBar';
+import { Button } from '../atoms/Button';
 
 import { TrainingForm } from '../molecules/TrainingForm';
 
@@ -60,7 +61,7 @@ export class TrainingPage extends React.Component {
   };
 
   render() {
-    const { deck, words } = this.props;
+    const { deck, words, onPageChange } = this.props;
     const { isFinished, currentWordIndex } = this.state;
 
     return (
@@ -73,13 +74,26 @@ export class TrainingPage extends React.Component {
               words.length,
             )}
           />
+          <br />
+
           {!isFinished && (
-            <p>
-              {currentWordIndex}/{words.length} words
-              learned
-            </p>
+            <>
+              <div>
+                {currentWordIndex}/{words.length} words
+                learned
+              </div>
+              <br />
+            </>
           )}
+          <Button
+            onClick={() =>
+              onPageChange('deck', { deckId: deck.id })
+            }
+          >
+            Back
+          </Button>
         </Tile>
+
         {!isFinished ? (
           <>
             <Tile>

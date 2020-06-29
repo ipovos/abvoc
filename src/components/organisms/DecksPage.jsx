@@ -77,7 +77,7 @@ export class DecksPage extends React.Component {
           <DeckTile
             key={deck.id}
             deck={deck}
-            pageChangeCaption="Go!"
+            pageChangeCaption="See deck"
             onPageChange={() =>
               onPageChange('deck', {
                 deckId: deck.id,

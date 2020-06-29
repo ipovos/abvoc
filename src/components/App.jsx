@@ -8,7 +8,7 @@ import * as store from '../shared/store';
 
 export class App extends React.Component {
   state = {
-    page: 'train',
+    page: 'decks',
     pageParams: {
       deckId: '2',
     },
@@ -56,7 +56,7 @@ export class App extends React.Component {
             onPageChange={this.changePage}
           />
         )}
-        {page === 'train' && (
+        {page === 'training' && (
           <TrainingPage
             router={router}
             deck={decksById[pageParams.deckId]}

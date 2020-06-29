@@ -64,7 +64,7 @@ export class DeckPage extends React.Component {
   };
 
   render() {
-    const { deck } = this.props;
+    const { deck, onPageChange } = this.props;
     const { validationError, query } = this.state;
     const filteredWords = this.getFilteredWords();
 
@@ -72,13 +72,17 @@ export class DeckPage extends React.Component {
       <Container>
         <DeckTile
           deck={deck}
-          pageChangeCaption="Back!"
-          onPageChange={() =>
-            this.props.onPageChange('decks')
-          }
+          pageChangeCaption="Back"
+          onPageChange={() => onPageChange('decks', null)}
         />
         <p>
-          <Button wide look="purple">
+          <Button
+            wide
+            look="purple"
+            onClick={() =>
+              onPageChange('training', { deckId: deck.id })
+            }
+          >
             train
           </Button>
         </p>
