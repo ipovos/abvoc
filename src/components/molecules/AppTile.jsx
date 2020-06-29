@@ -4,6 +4,8 @@ import { Tile } from '../atoms/Tile';
 import { Title } from '../atoms/Title';
 import { ProgressBar } from '../atoms/ProgressBar';
 
+import { calculatePercent } from '../../shared/utils';
+
 export const AppTile = ({ appData }) => {
   const {
     decksCount,
@@ -16,7 +18,10 @@ export const AppTile = ({ appData }) => {
     <Tile>
       <Title>Abvoc</Title>
       <ProgressBar
-        percent={(learnedWordsCount / wordsCount) * 100}
+        percent={calculatePercent(
+          learnedWordsCount,
+          wordsCount,
+        )}
       />
       <p>
         {learnedDecksCount}/{decksCount} decks learned

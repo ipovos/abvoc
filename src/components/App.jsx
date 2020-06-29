@@ -2,7 +2,7 @@ import React from 'react';
 
 import { DecksPage } from './organisms/DecksPage';
 import { DeckPage } from './organisms/DeckPage';
-import { TrainPage } from './organisms/TrainPage';
+import { TrainingPage } from './organisms/TrainingPage';
 
 import * as store from '../shared/store';
 
@@ -57,7 +57,7 @@ export class App extends React.Component {
           />
         )}
         {page === 'train' && (
-          <TrainPage
+          <TrainingPage
             router={router}
             deck={decksById[pageParams.deckId]}
             words={this.getWordsByDeckId(pageParams.deckId)}

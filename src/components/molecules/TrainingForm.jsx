@@ -4,23 +4,38 @@ import { Input } from '../atoms/Input';
 
 import { ProgressBar } from '../atoms/ProgressBar';
 
-export class TrainForm extends React.Component {
+import { calculatePercent } from '../../shared/utils';
+
+export class TrainingForm extends React.Component {
   state = {
     value: '',
   };
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.targetValue === this.props.targetValue) {
+      return;
+    }
+
+    this.setState({ value: '' });
+  }
+
   handleValueChange = (event) => {
-    this.setState({ value: event.target.value });
+    const { value } = event.target;
+    const { onSuccess } = this.props;
+
+    if (this.getProgressPercent(value) === 100) {
+      onSuccess();
+    }
+
+    this.setState({ value });
   };
 
-  getProgressPercent = () => {
+  getProgressPercent = (value) => {
     const { targetValue } = this.props;
-    const { value } = this.state;
 
     const normalizedTargetValue = this.normalizeValue(
       targetValue,
     );
-
     const normalizedValue = this.normalizeValue(value);
 
     if (
@@ -29,17 +44,26 @@ export class TrainForm extends React.Component {
       return 0;
     }
 
-    return (value.length / targetValue.length) * 100;
+    return calculatePercent(
+      normalizedValue.length,
+      normalizedTargetValue.length,
+    );
   };
 
-  normalizeValue = (value) => {
+  normalizeValue = (value = '') => {
     return value.toLowerCase();
   };
 
   render() {
-    const { caption, ...otherProps } = this.props;
+    const {
+      caption,
+      targetValue,
+      onSuccess,
+      ...otherProps
+    } = this.props;
     const { value } = this.state;
-    const progressPercent = this.getProgressPercent();
+
+    const progressPercent = this.getProgressPercent(value);
 
     return (
       <>
