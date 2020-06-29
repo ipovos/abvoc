@@ -1,14 +1,15 @@
 import React from 'react';
 
+import { getDeckLearningProgress } from '../../features/entities';
+
 import { Tile } from '../atoms/Tile';
 import { Title } from '../atoms/Title';
 import { ProgressBar } from '../atoms/ProgressBar';
 import { Button } from '../atoms/Button';
 
-import { calculatePercent } from '../../shared/utils';
-
 export const DeckTile = ({
   deck,
+  records,
   pageChangeCaption,
   onPageChange,
   onDeckDelete,
@@ -19,10 +20,7 @@ export const DeckTile = ({
     <Tile>
       <Title>{title}</Title>
       <ProgressBar
-        percent={calculatePercent(
-          learnedRecordsIds.length,
-          recordsIds.length,
-        )}
+        percent={getDeckLearningProgress(records)}
       />
       <p>
         {learnedRecordsIds.length}/{recordsIds.length}{' '}

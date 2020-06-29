@@ -110,6 +110,7 @@ export class DeckPage extends React.Component {
       <Container>
         <DeckTile
           deck={deck}
+          records={records}
           pageChangeCaption="Back"
           onPageChange={() => onPageChange('decks', null)}
           onDeckDelete={(deck) => {

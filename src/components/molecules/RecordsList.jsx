@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { getRecordLearningProgress } from '../../features/entities';
+
 import { ProgressBar } from '../atoms/ProgressBar';
 import { Button } from '../atoms/Button';
 
@@ -26,7 +28,9 @@ export const RecordsList = ({ list, onRecordDelete }) => {
               <p style={{ margin: 0, lineHeight: '1.5' }}>
                 <b>{record.firstSide}</b>
               </p>
-              <ProgressBar percent={20} />
+              <ProgressBar
+                percent={getRecordLearningProgress(record)}
+              />
               <p style={{ margin: 0, lineHeight: '1.5' }}>
                 {record.secondSide}
               </p>

@@ -85,6 +85,7 @@ export class DecksPage extends React.Component {
       onDataExport,
       onDataReset,
       onDeckDelete,
+      getRecordsByDeckId,
     } = this.props;
     const { validationError, query } = this.state;
     const filteredDecks = this.getFilteredDecks();
@@ -128,6 +129,7 @@ export class DecksPage extends React.Component {
           <DeckTile
             key={deck.id}
             deck={deck}
+            records={getRecordsByDeckId(deck.id)}
             pageChangeCaption="See deck"
             onPageChange={() =>
               onPageChange('deck', {

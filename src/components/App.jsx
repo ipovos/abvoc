@@ -228,6 +228,84 @@ export class App extends React.Component {
     });
   };
 
+  updateRecords = (deck, records) => {
+    const updatedRecords = records.map((record) => ({
+      ...record,
+      lastRepetition: new Date().toISOString(),
+      iteration: record.iteration + 1,
+    }));
+
+    const prevLearnedRecordsCount = records.filter(
+      isRecordLearned,
+    ).length;
+    const learnedRecordsCount = updatedRecords.filter(
+      isRecordLearned,
+    ).length;
+
+    const learnedRecordsCountChange =
+      learnedRecordsCount - prevLearnedRecordsCount;
+
+    const learnedUpdatedRecordsIds = updatedRecords
+      .filter(isRecordLearned)
+      .map((record) => record.id);
+
+    const updatedRecordsById = Object.fromEntries(
+      updatedRecords.map((record) => [record.id, record]),
+    );
+
+    this.setState((prevState) => {
+      const newRecordsById = {
+        ...prevState.recordsById,
+        ...updatedRecordsById,
+      };
+
+      const newDecksById = {
+        ...prevState.decksById,
+        [deck.id]: {
+          ...prevState.decksById[deck.id],
+
+          learnedRecordsIds: learnedUpdatedRecordsIds.reduce(
+            (prevLearnedRecordsIds, learnedRecordId) => {
+              if (
+                prevLearnedRecordsIds.includes(
+                  learnedRecordId,
+                )
+              ) {
+                return prevLearnedRecordsIds;
+              }
+
+              return prevLearnedRecordsIds.concat[
+                learnedRecordId
+              ];
+            },
+            prevState.decksById[deck.id].learnedRecordsIds,
+          ),
+        },
+      };
+
+      const hasNewLearnedDeck =
+        deck.learnedRecordsIds !== deck.recordsIds &&
+        newDecksById[deck.id].learnedRecordsIds ===
+          newDecksById[deck.id].recordsCount;
+
+      return {
+        ...prevState,
+        appData: {
+          ...prevState.appData,
+
+          learnedRecordsCount:
+            prevState.appData.learnedRecordsCount +
+            learnedRecordsCountChange,
+          learnedDecksCount: hasNewLearnedDeck
+            ? prevState.appData.learnedDecksCount + 1
+            : prevState.appData.learnedDecksCount,
+        },
+        decksById: newDecksById,
+        recordsById: newRecordsById,
+      };
+    });
+  };
+
   render() {
     const {
       page,
@@ -245,6 +323,7 @@ export class App extends React.Component {
             router={router}
             appData={appData}
             decks={Object.values(decksById)}
+            getRecordsByDeckId={this.getRecordsByDeckId}
             onPageChange={this.changePage}
             onDataImport={this.importData}
             onDataExport={this.exportData}
@@ -274,6 +353,7 @@ export class App extends React.Component {
               pageParams.deckId,
             )}
             onPageChange={this.changePage}
+            onFinishTraining={this.updateRecords}
           />
         )}
       </>

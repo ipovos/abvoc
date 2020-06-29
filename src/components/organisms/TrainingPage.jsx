@@ -44,6 +44,10 @@ export class TrainingPage extends React.Component {
       isFinished: true,
       currentRecordIndex: state.currentRecordIndex + 1,
     }));
+    this.props.onFinishTraining(
+      this.props.deck,
+      this.props.records,
+    );
   };
 
   playRecordSuccessAudio = () => {
@@ -79,8 +83,8 @@ export class TrainingPage extends React.Component {
           {!isFinished && (
             <>
               <div>
-                {currentRecordIndex}/{records.length} records
-                learned
+                {currentRecordIndex}/{records.length}{' '}
+                records learned
               </div>
               <br />
             </>
