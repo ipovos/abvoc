@@ -28,13 +28,24 @@ const createDeck = (title) => {
   };
 };
 
-const createRecord = ({ firstSide, secondSide }) => {
+const createRecord = ({
+  firstSide,
+  secondSide,
+  deckId,
+}) => {
   return {
     firstSide,
     secondSide,
+    deckId,
     id: createID(),
-    status: 'inProgress',
+    lastRepetition: null,
+    nextRepetition: null,
+    iteration: 0,
   };
+};
+
+const isRecordLearned = (record) => {
+  return false;
 };
 
 export class App extends React.Component {
@@ -217,6 +228,47 @@ export class App extends React.Component {
     });
   };
 
+  deleteRecord = (record) => {
+    this.setState((prevState) => {
+      const { deckId } = record;
+
+      const {
+        [record.id]: deletedRecord,
+        ...restRecordsById
+      } = prevState.recordsById;
+
+      return {
+        appData: {
+          ...prevState.appData,
+          recordsCount: prevState.appData.recordsCount - 1,
+          learnedRecordsCount: isRecordLearned(record)
+            ? prevState.appData.learnedRecordsCount - 1
+            : prevState.appData.learnedRecordsCount,
+        },
+        decksById: {
+          ...prevState.decksById,
+          [deckId]: {
+            ...prevState.decksById[deckId],
+            recordsCount:
+              prevState.decksById[deckId].recordsCount - 1,
+            learnedRecordsCount: isRecordLearned(record)
+              ? prevState.decksById[deckId]
+                  .learnedRecordsCount - 1
+              : prevState.decksById[deckId]
+                  .learnedRecordsCount,
+          },
+        },
+        recordsById: restRecordsById,
+        recordsIdsByDeckId: {
+          ...prevState.recordsIdsByDeckId,
+          [deckId]: prevState.recordsIdsByDeckId[
+            deckId
+          ].filter((id) => id !== record.id),
+        },
+      };
+    });
+  };
+
   render() {
     const {
       page,
@@ -252,6 +304,7 @@ export class App extends React.Component {
             onPageChange={this.changePage}
             onDeckDelete={this.deleteDeck}
             onRecordCreate={this.createRecord}
+            onRecordDelete={this.deleteRecord}
           />
         )}
         {page === 'training' && (

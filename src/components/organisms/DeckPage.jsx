@@ -97,6 +97,7 @@ export class DeckPage extends React.Component {
       records,
       onPageChange,
       onDeckDelete,
+      onRecordDelete,
     } = this.props;
     const {
       validationError,
@@ -117,7 +118,9 @@ export class DeckPage extends React.Component {
           }}
         />
         <p
-          style={{ opacity: records.length === 0 ? 0.5 : 1 }}
+          style={{
+            opacity: records.length === 0 ? 0.5 : 1,
+          }}
         >
           <Button
             wide
@@ -171,7 +174,10 @@ export class DeckPage extends React.Component {
 
         {filteredRecords.length > 0 && (
           <Tile noPadding>
-            <RecordsList list={filteredRecords} />
+            <RecordsList
+              list={filteredRecords}
+              onRecordDelete={onRecordDelete}
+            />
           </Tile>
         )}
       </Container>
