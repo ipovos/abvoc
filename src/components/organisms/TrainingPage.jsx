@@ -129,11 +129,11 @@ export class TrainingPage extends React.Component {
         )}
 
         <div style={{ position: 'absolute' }}>
-          <video
+          <audio
             ref={this.recordSuccessAudio}
             src={chime}
           />
-          <video
+          <audio
             ref={this.trainingSuccessAudio}
             src={positiveAlert}
           />
