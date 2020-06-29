@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/abvoc/static/css/main.5ecd60fb.chunk.css",
-    "main.js": "/abvoc/static/js/main.dc94e952.chunk.js",
-    "main.js.map": "/abvoc/static/js/main.dc94e952.chunk.js.map",
+    "main.js": "/abvoc/static/js/main.f791c352.chunk.js",
+    "main.js.map": "/abvoc/static/js/main.f791c352.chunk.js.map",
     "runtime-main.js": "/abvoc/static/js/runtime-main.a8b1dd07.js",
     "runtime-main.js.map": "/abvoc/static/js/runtime-main.a8b1dd07.js.map",
     "static/js/2.d7b3097c.chunk.js": "/abvoc/static/js/2.d7b3097c.chunk.js",
     "static/js/2.d7b3097c.chunk.js.map": "/abvoc/static/js/2.d7b3097c.chunk.js.map",
     "index.html": "/abvoc/index.html",
-    "precache-manifest.49afe1e2ebc30cbf7723b750d803cdb4.js": "/abvoc/precache-manifest.49afe1e2ebc30cbf7723b750d803cdb4.js",
+    "precache-manifest.722e8cf057851ce0b44ec9171b6d1860.js": "/abvoc/precache-manifest.722e8cf057851ce0b44ec9171b6d1860.js",
     "service-worker.js": "/abvoc/service-worker.js",
     "static/css/main.5ecd60fb.chunk.css.map": "/abvoc/static/css/main.5ecd60fb.chunk.css.map",
     "static/js/2.d7b3097c.chunk.js.LICENSE.txt": "/abvoc/static/js/2.d7b3097c.chunk.js.LICENSE.txt",
@@ -19,6 +19,6 @@
     "static/js/runtime-main.a8b1dd07.js",
     "static/js/2.d7b3097c.chunk.js",
     "static/css/main.5ecd60fb.chunk.css",
-    "static/js/main.dc94e952.chunk.js"
+    "static/js/main.f791c352.chunk.js"
   ]
 }
