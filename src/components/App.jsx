@@ -160,7 +160,9 @@ export class App extends React.Component {
       } = prevState.recordsIdsByDeckId;
 
       const getRecordsByIdWithouDeletedDeckRecords = () => {
-        const recordsByIdCopy = { ...prevState.recordsById };
+        const recordsByIdCopy = {
+          ...prevState.recordsById,
+        };
 
         deletedDeckRecordsIds.forEach((recordId) => {
           delete recordsByIdCopy[recordId];
@@ -191,7 +193,7 @@ export class App extends React.Component {
       return {
         appData: {
           ...prevState.appData,
-          recordsCount: prevState.recordsCount + 1,
+          recordsCount: prevState.appData.recordsCount + 1,
         },
         decksById: {
           ...prevState.decksById,
@@ -244,7 +246,9 @@ export class App extends React.Component {
           <DeckPage
             router={router}
             deck={decksById[pageParams.deckId]}
-            records={this.getRecordsByDeckId(pageParams.deckId)}
+            records={this.getRecordsByDeckId(
+              pageParams.deckId,
+            )}
             onPageChange={this.changePage}
             onDeckDelete={this.deleteDeck}
             onRecordCreate={this.createRecord}
@@ -254,7 +258,9 @@ export class App extends React.Component {
           <TrainingPage
             router={router}
             deck={decksById[pageParams.deckId]}
-            records={this.getRecordsByDeckId(pageParams.deckId)}
+            records={this.getRecordsByDeckId(
+              pageParams.deckId,
+            )}
             onPageChange={this.changePage}
           />
         )}
