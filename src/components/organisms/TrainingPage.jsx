@@ -9,6 +9,8 @@ import { Button } from '../atoms/Button';
 import { TrainingForm } from '../molecules/TrainingForm';
 
 import { calculatePercent } from '../../shared/utils';
+import chime from '../../shared/chime.mp3';
+import positiveAlert from '../../shared/positiveAlert.mp3';
 
 export class TrainingPage extends React.Component {
   state = {
@@ -126,14 +128,26 @@ export class TrainingPage extends React.Component {
           </Tile>
         )}
 
-        <video
-          ref={this.recordSuccessAudio}
-          src="/chime.mp3"
-        />
-        <video
-          ref={this.trainingSuccessAudio}
-          src="/positiveAlert.mp3"
-        />
+        <div style={{ position: 'absolute' }}>
+          <video
+            ref={this.recordSuccessAudio}
+            src={chime}
+          />
+          <video
+            ref={this.trainingSuccessAudio}
+            src={positiveAlert}
+          />
+        </div>
+        <p>
+          Sound effects obtained from{' '}
+          <a
+            href="https://www.zapsplat.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            https://www.zapsplat.com
+          </a>
+        </p>
       </Container>
     );
   }
