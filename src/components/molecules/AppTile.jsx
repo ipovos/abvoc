@@ -93,7 +93,8 @@ export class AppTile extends React.Component {
           {learnedDecksCount}/{decksCount} decks learned
         </p>
         <p>
-          {learnedRecordsCount}/{recordsCount} records learned
+          {learnedRecordsCount}/{recordsCount} records
+          learned
         </p>
 
         <input
@@ -108,6 +109,7 @@ export class AppTile extends React.Component {
           style={{
             display: 'flex',
             justifyContent: 'space-between',
+            flexWrap: 'wrap',
           }}
         >
           <Button
