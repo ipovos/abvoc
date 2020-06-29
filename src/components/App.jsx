@@ -48,6 +48,10 @@ const isRecordLearned = (record) => {
   return false;
 };
 
+const isDeckLearned = (record) => {
+  return false;
+};
+
 export class App extends React.Component {
   emptyVocabulary = {
     appData: {
@@ -59,8 +63,6 @@ export class App extends React.Component {
     // for the sake of search
     decksById: {},
     recordsById: {},
-    // one to one
-    recordsIdsByDeckId: {},
   };
 
   state = {
@@ -75,18 +77,12 @@ export class App extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const {
-      appData,
-      decksById,
-      recordsById,
-      recordsIdsByDeckId,
-    } = this.state;
+    const { appData, decksById, recordsById } = this.state;
 
     if (
       appData === prevState.appData &&
       decksById === prevState.decksById &&
-      recordsById === prevState.recordsById &&
-      recordsIdsByDeckId === prevState.recordsIdsByDeckId
+      recordsById === prevState.recordsById
     ) {
       return;
     }
@@ -96,7 +92,6 @@ export class App extends React.Component {
         appData,
         decksById,
         recordsById,
-        recordsIdsByDeckId,
       }),
     );
   }
@@ -106,8 +101,8 @@ export class App extends React.Component {
   };
 
   getRecordsByDeckId = (deckId) => {
-    return this.state.recordsIdsByDeckId[deckId].map(
-      (recordId) => this.state.recordsById[recordId],
+    return Object.values(this.state.recordsById).filter(
+      (record) => record.deckId === deckId,
     );
   };
 
@@ -116,19 +111,13 @@ export class App extends React.Component {
   };
 
   exportData = () => {
-    const {
-      appData,
-      decksById,
-      recordsById,
-      recordsIdsByDeckId,
-    } = this.state;
+    const { appData, decksById, recordsById } = this.state;
 
     exportData(
       JSON.stringify({
         appData,
         decksById,
         recordsById,
-        recordsIdsByDeckId,
       }),
     );
   };
@@ -150,10 +139,6 @@ export class App extends React.Component {
           ...prevState.decksById,
           [newDeck.id]: newDeck,
         },
-        recordsIdsByDeckId: {
-          ...prevState.recordsIdsByDeckId,
-          [newDeck.id]: [],
-        },
       };
     });
   };
@@ -165,31 +150,36 @@ export class App extends React.Component {
         ...restDecksById
       } = prevState.decksById;
 
-      const {
-        [deck.id]: deletedDeckRecordsIds,
-        ...restRecordsIdsByDeckId
-      } = prevState.recordsIdsByDeckId;
-
-      const getRecordsByIdWithouDeletedDeckRecords = () => {
-        const recordsByIdCopy = {
-          ...prevState.recordsById,
-        };
-
-        deletedDeckRecordsIds.forEach((recordId) => {
-          delete recordsByIdCopy[recordId];
-        });
-
-        return recordsByIdCopy;
-      };
+      const recordsByDeckId = this.getRecordsByDeckId(
+        deck.id,
+      );
+      const learnedRecordsByDeckId = recordsByDeckId.filter(
+        isRecordLearned,
+      );
 
       return {
         appData: {
           ...prevState.appData,
+
           decksCount: prevState.appData.decksCount - 1,
+          learnedDeckssCount: isDeckLearned(deck)
+            ? prevState.appData.learnedDecksCount - 1
+            : prevState.appData.learnedDecksCount,
+
+          recordsCount:
+            prevState.appData.decksCount -
+            recordsByDeckId.length,
+          learnedRecordsCount:
+            prevState.appData.learnedRecordsCount -
+            learnedRecordsByDeckId.length,
         },
         decksById: restDecksById,
-        recordsIdsByDeckId: restRecordsIdsByDeckId,
-        recordsById: getRecordsByIdWithouDeletedDeckRecords(),
+        recordsById: Object.fromEntries(
+          Object.entries(prevState.recordsById).filter(
+            ([recordId, record]) =>
+              record.deckId !== deck.id,
+          ),
+        ),
       };
     });
   };
@@ -198,6 +188,7 @@ export class App extends React.Component {
     const newRecord = createRecord({
       firstSide,
       secondSide,
+      deckId,
     });
 
     this.setState((prevState) => {
@@ -217,12 +208,6 @@ export class App extends React.Component {
         recordsById: {
           ...prevState.recordsById,
           [newRecord.id]: newRecord,
-        },
-        recordsIdsByDeckId: {
-          ...prevState.recordsIdsByDeckId,
-          [deckId]: prevState.recordsIdsByDeckId[
-            deckId
-          ].concat([newRecord.id]),
         },
       };
     });
@@ -249,6 +234,7 @@ export class App extends React.Component {
           ...prevState.decksById,
           [deckId]: {
             ...prevState.decksById[deckId],
+
             recordsCount:
               prevState.decksById[deckId].recordsCount - 1,
             learnedRecordsCount: isRecordLearned(record)
@@ -259,12 +245,6 @@ export class App extends React.Component {
           },
         },
         recordsById: restRecordsById,
-        recordsIdsByDeckId: {
-          ...prevState.recordsIdsByDeckId,
-          [deckId]: prevState.recordsIdsByDeckId[
-            deckId
-          ].filter((id) => id !== record.id),
-        },
       };
     });
   };
