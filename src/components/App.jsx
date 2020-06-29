@@ -351,7 +351,14 @@ export class App extends React.Component {
             deck={decksById[pageParams.deckId]}
             records={this.getRecordsByDeckId(
               pageParams.deckId,
-            )}
+            )
+              .sort((a, b) => {
+                if (a.lastRepetition < b.lastRepetition) {
+                  return 1;
+                }
+                return -1;
+              })
+              .slice(0, 5)}
             onPageChange={this.changePage}
             onFinishTraining={this.updateRecords}
           />
