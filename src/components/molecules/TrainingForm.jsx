@@ -19,7 +19,7 @@ export class TrainingForm extends React.Component {
     this.setState({ value: '' });
   }
 
-  handleValueChange = (event) => {
+  onValueChange = (event) => {
     const { value } = event.target;
     const { onSuccess } = this.props;
 
@@ -75,7 +75,7 @@ export class TrainingForm extends React.Component {
           type="text"
           placeholder="type here..."
           value={value}
-          onChange={this.handleValueChange}
+          onChange={this.onValueChange}
           autoFocus
           {...otherProps}
         />

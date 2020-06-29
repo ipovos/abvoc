@@ -19,7 +19,7 @@ export class TrainingPage extends React.Component {
   wordSuccessAudio = React.createRef();
   trainingSuccessAudio = React.createRef();
 
-  handleSuccessInput = () => {
+  onSuccessInput = () => {
     const { words } = this.props;
     const { currentWordIndex } = this.state;
 
@@ -105,7 +105,7 @@ export class TrainingPage extends React.Component {
                 targetValue={
                   words[currentWordIndex].definition
                 }
-                onSuccess={this.handleSuccessInput}
+                onSuccess={this.onSuccessInput}
               />
             </Tile>
           </>
