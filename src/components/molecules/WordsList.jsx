@@ -22,11 +22,11 @@ export const WordsList = (props) => {
         >
           <div>
             <p style={{ margin: 0, lineHeight: '1.5' }}>
-              <b>{word.term}</b>
+              <b>{word.firstSide}</b>
             </p>
             <ProgressBar percent={20} />
             <p style={{ margin: 0, lineHeight: '1.5' }}>
-              {word.definition}
+              {word.secondSide}
             </p>
           </div>
         </li>

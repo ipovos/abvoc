@@ -8,6 +8,7 @@ import { SearchForm } from '../molecules/SearchForm';
 import { AppTile } from '../molecules/AppTile';
 import { DeckTile } from '../molecules/DeckTile';
 import { NotFoundTile } from '../molecules/NotFoundTile';
+import { Button } from '../atoms/Button';
 
 export class DecksPage extends React.Component {
   state = {
@@ -52,6 +53,15 @@ export class DecksPage extends React.Component {
     }
   };
 
+  onDeckCreate = () => {
+    this.props.onDeckCreate(this.state.query);
+    this.setState({
+      hasValidationError: false,
+      validationError: '',
+      query: '',
+    });
+  };
+
   getFilteredDecks = () => {
     const { hasValidationError, query } = this.state;
     const { decks } = this.props;
@@ -74,6 +84,7 @@ export class DecksPage extends React.Component {
       onDataImport,
       onDataExport,
       onDataReset,
+      onDeckDelete,
     } = this.props;
     const { validationError, query } = this.state;
     const filteredDecks = this.getFilteredDecks();
@@ -87,15 +98,30 @@ export class DecksPage extends React.Component {
           onDataReset={onDataReset}
         />
 
-        {filteredDecks.length > 0 && (
-          <Tile>
-            <SearchForm
-              caption="to search sets"
-              value={query}
-              onChange={this.onQueryChange}
-              validationError={validationError}
-            />
-          </Tile>
+        <Tile>
+          <SearchForm
+            caption="to search or create decks"
+            value={query}
+            onChange={this.onQueryChange}
+            validationError={validationError}
+          />
+        </Tile>
+
+        {filteredDecks.length === 0 && query.length > 0 && (
+          <NotFoundTile
+            caption={
+              <>
+                <div>
+                  oops, no “<Mark>{query}</Mark>
+                  ”-containing decks found
+                </div>
+                <br />
+                <Button onClick={this.onDeckCreate}>
+                  Create “{query}” deck
+                </Button>
+              </>
+            }
+          />
         )}
 
         {filteredDecks.map((deck) => (
@@ -108,19 +134,9 @@ export class DecksPage extends React.Component {
                 deckId: deck.id,
               })
             }
+            onDeckDelete={onDeckDelete}
           />
         ))}
-
-        {filteredDecks.length === 0 && query.length > 0 && (
-          <NotFoundTile
-            caption={
-              <>
-                oops, no “<Mark>{query}</Mark>
-                ”-containing decks found
-              </>
-            }
-          />
-        )}
       </Container>
     );
   }

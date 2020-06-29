@@ -97,13 +97,15 @@ export class TrainingPage extends React.Component {
         {!isFinished ? (
           <>
             <Tile>
-              <Title>{words[currentWordIndex].term}</Title>
+              <Title>
+                {words[currentWordIndex].firstSide}
+              </Title>
             </Tile>
             <Tile>
               <TrainingForm
                 caption="enter translation of the word above"
                 targetValue={
-                  words[currentWordIndex].definition
+                  words[currentWordIndex].secondSide
                 }
                 onSuccess={this.onSuccessInput}
               />

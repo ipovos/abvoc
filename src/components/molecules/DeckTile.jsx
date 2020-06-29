@@ -11,6 +11,7 @@ export const DeckTile = ({
   deck,
   pageChangeCaption,
   onPageChange,
+  onDeckDelete,
 }) => {
   const { title, wordsCount, learnedWordsCount } = deck;
 
@@ -27,9 +28,19 @@ export const DeckTile = ({
         {learnedWordsCount}/{wordsCount} words learned
       </p>
       <p>Learning in progress</p>
-      <Button onClick={onPageChange}>
-        {pageChangeCaption}
-      </Button>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Button onClick={onPageChange}>
+          {pageChangeCaption}
+        </Button>
+        <Button onClick={() => onDeckDelete(deck)}>
+          Delete
+        </Button>
+      </div>
     </Tile>
   );
 };

@@ -10,12 +10,15 @@ import { WordsList } from '../molecules/WordsList';
 
 import { NotFoundTile } from '../molecules/NotFoundTile';
 import { DeckTile } from '../molecules/DeckTile';
+import { RecordCreatingForm } from '../molecules/RecordCreatingForm';
 
 export class DeckPage extends React.Component {
   state = {
     hasValidationError: false,
     validationError: '',
     query: '',
+
+    isRecordCreating: false,
   };
 
   onQueryChange = (event) => {
@@ -32,6 +35,8 @@ export class DeckPage extends React.Component {
       validationError: hasValidationError
         ? 'need more letters'
         : '',
+
+      isRecordCreating: false,
     });
   };
 
@@ -41,6 +46,29 @@ export class DeckPage extends React.Component {
 
   validateQuery = (query) => {
     return query.length > 0 && query.length < 2;
+  };
+
+  startRecordCreating = () => {
+    this.setState({ isRecordCreating: true });
+  };
+
+  finishRecordCreating = () => {
+    this.setState({
+      hasValidationError: false,
+      query: '',
+      validationError: '',
+
+      isRecordCreating: false,
+    });
+  };
+
+  createRecord = ({ firstSide, secondSide }) => {
+    this.props.onRecordCreate({
+      firstSide,
+      secondSide,
+      deckId: this.props.deck.id,
+    });
+    this.finishRecordCreating();
   };
 
   getFilteredWords = () => {
@@ -53,10 +81,10 @@ export class DeckPage extends React.Component {
 
     return words.filter((word) => {
       return (
-        word.term
+        word.firstSide
           .toLowerCase()
           .includes(query.toLowerCase()) ||
-        word.definition
+        word.secondSide
           .toLowerCase()
           .includes(query.toLowerCase())
       );
@@ -64,8 +92,17 @@ export class DeckPage extends React.Component {
   };
 
   render() {
-    const { deck, onPageChange } = this.props;
-    const { validationError, query } = this.state;
+    const {
+      deck,
+      words,
+      onPageChange,
+      onDeckDelete,
+    } = this.props;
+    const {
+      validationError,
+      query,
+      isRecordCreating,
+    } = this.state;
     const filteredWords = this.getFilteredWords();
 
     return (
@@ -74,39 +111,68 @@ export class DeckPage extends React.Component {
           deck={deck}
           pageChangeCaption="Back"
           onPageChange={() => onPageChange('decks', null)}
+          onDeckDelete={(deck) => {
+            onPageChange('decks', null);
+            onDeckDelete(deck);
+          }}
         />
-        <p>
+        <p
+          style={{ opacity: words.length === 0 ? 0.5 : 1 }}
+        >
           <Button
             wide
             look="purple"
             onClick={() =>
               onPageChange('training', { deckId: deck.id })
             }
+            disabled={words.length === 0}
           >
             train
           </Button>
         </p>
         <Tile>
           <SearchForm
-            caption="to search words"
+            caption="to search or create words"
             value={query}
             onChange={this.onQueryChange}
             validationError={validationError}
           />
         </Tile>
-        {filteredWords?.length > 0 ? (
-          <Tile noPadding>
-            <WordsList list={filteredWords} />
-          </Tile>
-        ) : (
+
+        {filteredWords.length === 0 && query.length > 0 && (
           <NotFoundTile
             caption={
               <>
-                oops, no “<Mark>{query}</Mark>
-                ”-containing words found
+                {!isRecordCreating && (
+                  <>
+                    <div>
+                      oops, no “<Mark>{query}</Mark>
+                      ”-containing words found
+                    </div>
+                    <br />
+                  </>
+                )}
+                {isRecordCreating ? (
+                  <RecordCreatingForm
+                    initialFirstSide={query}
+                    onRecordCreate={this.createRecord}
+                  />
+                ) : (
+                  <Button
+                    onClick={this.startRecordCreating}
+                  >
+                    Create “{query}” record
+                  </Button>
+                )}
               </>
             }
           />
+        )}
+
+        {filteredWords.length > 0 && (
+          <Tile noPadding>
+            <WordsList list={filteredWords} />
+          </Tile>
         )}
       </Container>
     );
