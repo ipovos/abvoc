@@ -19,8 +19,8 @@ const createDeck = (title) => {
     title,
     type: 'deck',
     id: createID(),
-    wordsCount: 0,
-    learnedWordsCount: 0,
+    recordsCount: 0,
+    learnedRecordsCount: 0,
     lastRepetition: null,
     nextRepetition: null,
     iteration: 0,
@@ -42,14 +42,14 @@ export class App extends React.Component {
     appData: {
       decksCount: 0,
       learnedDecksCount: 0,
-      wordsCount: 0,
-      learnedWordsCount: 0,
+      recordsCount: 0,
+      learnedRecordsCount: 0,
     },
     // for the sake of search
     decksById: {},
-    wordsById: {},
+    recordsById: {},
     // one to one
-    wordsIdsByDeckId: {},
+    recordsIdsByDeckId: {},
   };
 
   state = {
@@ -67,15 +67,15 @@ export class App extends React.Component {
     const {
       appData,
       decksById,
-      wordsById,
-      wordsIdsByDeckId,
+      recordsById,
+      recordsIdsByDeckId,
     } = this.state;
 
     if (
       appData === prevState.appData &&
       decksById === prevState.decksById &&
-      wordsById === prevState.wordsById &&
-      wordsIdsByDeckId === prevState.wordsIdsByDeckId
+      recordsById === prevState.recordsById &&
+      recordsIdsByDeckId === prevState.recordsIdsByDeckId
     ) {
       return;
     }
@@ -84,8 +84,8 @@ export class App extends React.Component {
       JSON.stringify({
         appData,
         decksById,
-        wordsById,
-        wordsIdsByDeckId,
+        recordsById,
+        recordsIdsByDeckId,
       }),
     );
   }
@@ -94,9 +94,9 @@ export class App extends React.Component {
     this.setState({ page, pageParams });
   };
 
-  getWordsByDeckId = (deckId) => {
-    return this.state.wordsIdsByDeckId[deckId].map(
-      (wordId) => this.state.wordsById[wordId],
+  getRecordsByDeckId = (deckId) => {
+    return this.state.recordsIdsByDeckId[deckId].map(
+      (recordId) => this.state.recordsById[recordId],
     );
   };
 
@@ -108,16 +108,16 @@ export class App extends React.Component {
     const {
       appData,
       decksById,
-      wordsById,
-      wordsIdsByDeckId,
+      recordsById,
+      recordsIdsByDeckId,
     } = this.state;
 
     exportData(
       JSON.stringify({
         appData,
         decksById,
-        wordsById,
-        wordsIdsByDeckId,
+        recordsById,
+        recordsIdsByDeckId,
       }),
     );
   };
@@ -139,8 +139,8 @@ export class App extends React.Component {
           ...prevState.decksById,
           [newDeck.id]: newDeck,
         },
-        wordsIdsByDeckId: {
-          ...prevState.wordsIdsByDeckId,
+        recordsIdsByDeckId: {
+          ...prevState.recordsIdsByDeckId,
           [newDeck.id]: [],
         },
       };
@@ -155,18 +155,18 @@ export class App extends React.Component {
       } = prevState.decksById;
 
       const {
-        [deck.id]: deletedDeckWordsIds,
-        ...restWordsIdsByDeckId
-      } = prevState.wordsIdsByDeckId;
+        [deck.id]: deletedDeckRecordsIds,
+        ...restRecordsIdsByDeckId
+      } = prevState.recordsIdsByDeckId;
 
-      const getWordsByIdWithouDeletedDeckWords = () => {
-        const wordsByIdCopy = { ...prevState.wordsById };
+      const getRecordsByIdWithouDeletedDeckRecords = () => {
+        const recordsByIdCopy = { ...prevState.recordsById };
 
-        deletedDeckWordsIds.forEach((wordId) => {
-          delete wordsByIdCopy[wordId];
+        deletedDeckRecordsIds.forEach((recordId) => {
+          delete recordsByIdCopy[recordId];
         });
 
-        return wordsByIdCopy;
+        return recordsByIdCopy;
       };
 
       return {
@@ -175,8 +175,8 @@ export class App extends React.Component {
           decksCount: prevState.appData.decksCount - 1,
         },
         decksById: restDecksById,
-        wordsIdsByDeckId: restWordsIdsByDeckId,
-        wordsById: getWordsByIdWithouDeletedDeckWords(),
+        recordsIdsByDeckId: restRecordsIdsByDeckId,
+        recordsById: getRecordsByIdWithouDeletedDeckRecords(),
       };
     });
   };
@@ -191,23 +191,23 @@ export class App extends React.Component {
       return {
         appData: {
           ...prevState.appData,
-          wordsCount: prevState.wordsCount + 1,
+          recordsCount: prevState.recordsCount + 1,
         },
         decksById: {
           ...prevState.decksById,
           [deckId]: {
             ...prevState.decksById[deckId],
-            wordsCount:
-              prevState.decksById[deckId].wordsCount + 1,
+            recordsCount:
+              prevState.decksById[deckId].recordsCount + 1,
           },
         },
-        wordsById: {
-          ...prevState.wordsById,
+        recordsById: {
+          ...prevState.recordsById,
           [newRecord.id]: newRecord,
         },
-        wordsIdsByDeckId: {
-          ...prevState.wordsIdsByDeckId,
-          [deckId]: prevState.wordsIdsByDeckId[
+        recordsIdsByDeckId: {
+          ...prevState.recordsIdsByDeckId,
+          [deckId]: prevState.recordsIdsByDeckId[
             deckId
           ].concat([newRecord.id]),
         },
@@ -244,7 +244,7 @@ export class App extends React.Component {
           <DeckPage
             router={router}
             deck={decksById[pageParams.deckId]}
-            words={this.getWordsByDeckId(pageParams.deckId)}
+            records={this.getRecordsByDeckId(pageParams.deckId)}
             onPageChange={this.changePage}
             onDeckDelete={this.deleteDeck}
             onRecordCreate={this.createRecord}
@@ -254,7 +254,7 @@ export class App extends React.Component {
           <TrainingPage
             router={router}
             deck={decksById[pageParams.deckId]}
-            words={this.getWordsByDeckId(pageParams.deckId)}
+            records={this.getRecordsByDeckId(pageParams.deckId)}
             onPageChange={this.changePage}
           />
         )}

@@ -42,8 +42,8 @@ export class AppTile extends React.Component {
     const {
       decksCount,
       learnedDecksCount,
-      wordsCount,
-      learnedWordsCount,
+      recordsCount,
+      learnedRecordsCount,
     } = appData;
 
     if (decksCount === 0) {
@@ -85,15 +85,15 @@ export class AppTile extends React.Component {
         <Title>Abvoc</Title>
         <ProgressBar
           percent={calculatePercent(
-            learnedWordsCount,
-            wordsCount,
+            learnedRecordsCount,
+            recordsCount,
           )}
         />
         <p>
           {learnedDecksCount}/{decksCount} decks learned
         </p>
         <p>
-          {learnedWordsCount}/{wordsCount} words learned
+          {learnedRecordsCount}/{recordsCount} records learned
         </p>
 
         <input

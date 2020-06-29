@@ -6,7 +6,7 @@ import { Button } from '../atoms/Button';
 import { Mark } from '../atoms/Mark';
 
 import { SearchForm } from '../molecules/SearchForm';
-import { WordsList } from '../molecules/WordsList';
+import { RecordsList } from '../molecules/RecordsList';
 
 import { NotFoundTile } from '../molecules/NotFoundTile';
 import { DeckTile } from '../molecules/DeckTile';
@@ -71,20 +71,20 @@ export class DeckPage extends React.Component {
     this.finishRecordCreating();
   };
 
-  getFilteredWords = () => {
+  getFilteredRecords = () => {
     const { hasValidationError, query } = this.state;
-    const { words } = this.props;
+    const { records } = this.props;
 
     if (hasValidationError) {
-      return words;
+      return records;
     }
 
-    return words.filter((word) => {
+    return records.filter((record) => {
       return (
-        word.firstSide
+        record.firstSide
           .toLowerCase()
           .includes(query.toLowerCase()) ||
-        word.secondSide
+        record.secondSide
           .toLowerCase()
           .includes(query.toLowerCase())
       );
@@ -94,7 +94,7 @@ export class DeckPage extends React.Component {
   render() {
     const {
       deck,
-      words,
+      records,
       onPageChange,
       onDeckDelete,
     } = this.props;
@@ -103,7 +103,7 @@ export class DeckPage extends React.Component {
       query,
       isRecordCreating,
     } = this.state;
-    const filteredWords = this.getFilteredWords();
+    const filteredRecords = this.getFilteredRecords();
 
     return (
       <Container>
@@ -117,7 +117,7 @@ export class DeckPage extends React.Component {
           }}
         />
         <p
-          style={{ opacity: words.length === 0 ? 0.5 : 1 }}
+          style={{ opacity: records.length === 0 ? 0.5 : 1 }}
         >
           <Button
             wide
@@ -125,21 +125,21 @@ export class DeckPage extends React.Component {
             onClick={() =>
               onPageChange('training', { deckId: deck.id })
             }
-            disabled={words.length === 0}
+            disabled={records.length === 0}
           >
             train
           </Button>
         </p>
         <Tile>
           <SearchForm
-            caption="to search or create words"
+            caption="to search or create records"
             value={query}
             onChange={this.onQueryChange}
             validationError={validationError}
           />
         </Tile>
 
-        {filteredWords.length === 0 && query.length > 0 && (
+        {filteredRecords.length === 0 && query.length > 0 && (
           <NotFoundTile
             caption={
               <>
@@ -147,7 +147,7 @@ export class DeckPage extends React.Component {
                   <>
                     <div>
                       oops, no “<Mark>{query}</Mark>
-                      ”-containing words found
+                      ”-containing records found
                     </div>
                     <br />
                   </>
@@ -169,9 +169,9 @@ export class DeckPage extends React.Component {
           />
         )}
 
-        {filteredWords.length > 0 && (
+        {filteredRecords.length > 0 && (
           <Tile noPadding>
-            <WordsList list={filteredWords} />
+            <RecordsList list={filteredRecords} />
           </Tile>
         )}
       </Container>

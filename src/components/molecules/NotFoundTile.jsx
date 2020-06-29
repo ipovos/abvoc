@@ -13,7 +13,7 @@ export const NotFoundTile = ({ caption }) => {
           justifyContent: 'space-between',
         }}
       >
-        <Button>add word</Button>
+        <Button>add record</Button>
         <Button>add set</Button>
       </div> */}
     </Tile>

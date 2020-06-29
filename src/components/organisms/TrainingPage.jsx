@@ -13,28 +13,28 @@ import { calculatePercent } from '../../shared/utils';
 export class TrainingPage extends React.Component {
   state = {
     isFinished: false,
-    currentWordIndex: 0,
+    currentRecordIndex: 0,
   };
 
-  wordSuccessAudio = React.createRef();
+  recordSuccessAudio = React.createRef();
   trainingSuccessAudio = React.createRef();
 
   onSuccessInput = () => {
-    const { words } = this.props;
-    const { currentWordIndex } = this.state;
+    const { records } = this.props;
+    const { currentRecordIndex } = this.state;
 
-    if (currentWordIndex === words.length - 1) {
+    if (currentRecordIndex === records.length - 1) {
       this.finishTraining();
       return;
     }
 
-    this.nextWord();
+    this.nextRecord();
   };
 
-  nextWord = () => {
-    this.playWordSuccessAudio();
+  nextRecord = () => {
+    this.playRecordSuccessAudio();
     this.setState((state) => ({
-      currentWordIndex: state.currentWordIndex + 1,
+      currentRecordIndex: state.currentRecordIndex + 1,
     }));
   };
 
@@ -42,12 +42,12 @@ export class TrainingPage extends React.Component {
     this.playTrainingSuccessAudio();
     this.setState((state) => ({
       isFinished: true,
-      currentWordIndex: state.currentWordIndex + 1,
+      currentRecordIndex: state.currentRecordIndex + 1,
     }));
   };
 
-  playWordSuccessAudio = () => {
-    this.playAudio(this.wordSuccessAudio.current);
+  playRecordSuccessAudio = () => {
+    this.playAudio(this.recordSuccessAudio.current);
   };
 
   playTrainingSuccessAudio = () => {
@@ -61,8 +61,8 @@ export class TrainingPage extends React.Component {
   };
 
   render() {
-    const { deck, words, onPageChange } = this.props;
-    const { isFinished, currentWordIndex } = this.state;
+    const { deck, records, onPageChange } = this.props;
+    const { isFinished, currentRecordIndex } = this.state;
 
     return (
       <Container>
@@ -70,8 +70,8 @@ export class TrainingPage extends React.Component {
           <Title>{deck.title}</Title>
           <ProgressBar
             percent={calculatePercent(
-              currentWordIndex,
-              words.length,
+              currentRecordIndex,
+              records.length,
             )}
           />
           <br />
@@ -79,7 +79,7 @@ export class TrainingPage extends React.Component {
           {!isFinished && (
             <>
               <div>
-                {currentWordIndex}/{words.length} words
+                {currentRecordIndex}/{records.length} records
                 learned
               </div>
               <br />
@@ -98,14 +98,14 @@ export class TrainingPage extends React.Component {
           <>
             <Tile>
               <Title>
-                {words[currentWordIndex].firstSide}
+                {records[currentRecordIndex].firstSide}
               </Title>
             </Tile>
             <Tile>
               <TrainingForm
-                caption="enter translation of the word above"
+                caption="enter translation of the record above"
                 targetValue={
-                  words[currentWordIndex].secondSide
+                  records[currentRecordIndex].secondSide
                 }
                 onSuccess={this.onSuccessInput}
               />
@@ -123,7 +123,7 @@ export class TrainingPage extends React.Component {
         )}
 
         <video
-          ref={this.wordSuccessAudio}
+          ref={this.recordSuccessAudio}
           src="/chime.mp3"
         />
         <video

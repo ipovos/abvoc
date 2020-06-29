@@ -13,19 +13,19 @@ export const DeckTile = ({
   onPageChange,
   onDeckDelete,
 }) => {
-  const { title, wordsCount, learnedWordsCount } = deck;
+  const { title, recordsCount, learnedRecordsCount } = deck;
 
   return (
     <Tile>
       <Title>{title}</Title>
       <ProgressBar
         percent={calculatePercent(
-          learnedWordsCount,
-          wordsCount,
+          learnedRecordsCount,
+          recordsCount,
         )}
       />
       <p>
-        {learnedWordsCount}/{wordsCount} words learned
+        {learnedRecordsCount}/{recordsCount} records learned
       </p>
       <p>Learning in progress</p>
       <div

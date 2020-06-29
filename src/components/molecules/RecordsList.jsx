@@ -4,14 +4,14 @@ import { ProgressBar } from '../atoms/ProgressBar';
 
 import { colors } from '../../shared/styles';
 
-export const WordsList = (props) => {
+export const RecordsList = (props) => {
   return (
     <ul
       style={{ listStyle: 'none', padding: 0, margin: 0 }}
     >
-      {props.list.map((word, i) => (
+      {props.list.map((record, i) => (
         <li
-          key={word.id}
+          key={record.id}
           style={{
             padding: '1em',
             borderBottom:
@@ -22,11 +22,11 @@ export const WordsList = (props) => {
         >
           <div>
             <p style={{ margin: 0, lineHeight: '1.5' }}>
-              <b>{word.firstSide}</b>
+              <b>{record.firstSide}</b>
             </p>
             <ProgressBar percent={20} />
             <p style={{ margin: 0, lineHeight: '1.5' }}>
-              {word.secondSide}
+              {record.secondSide}
             </p>
           </div>
         </li>
