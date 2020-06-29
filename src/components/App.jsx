@@ -5,52 +5,16 @@ import {
   persistData,
   restoreData,
 } from '../features/persistence';
+import {
+  createDeck,
+  createRecord,
+  isDeckLearned,
+  isRecordLearned,
+} from '../features/entities';
 
 import { DecksPage } from './organisms/DecksPage';
 import { DeckPage } from './organisms/DeckPage';
 import { TrainingPage } from './organisms/TrainingPage';
-
-const createID = () => {
-  return `f${(~~(Math.random() * 1e8)).toString(16)}`;
-};
-
-const createDeck = (title) => {
-  return {
-    title,
-    type: 'deck',
-    id: createID(),
-    recordsCount: 0,
-    learnedRecordsCount: 0,
-    lastRepetition: null,
-    nextRepetition: null,
-    iteration: 0,
-    status: 'inProgress',
-  };
-};
-
-const createRecord = ({
-  firstSide,
-  secondSide,
-  deckId,
-}) => {
-  return {
-    firstSide,
-    secondSide,
-    deckId,
-    id: createID(),
-    lastRepetition: null,
-    nextRepetition: null,
-    iteration: 0,
-  };
-};
-
-const isRecordLearned = (record) => {
-  return false;
-};
-
-const isDeckLearned = (record) => {
-  return false;
-};
 
 export class App extends React.Component {
   emptyVocabulary = {
@@ -100,12 +64,6 @@ export class App extends React.Component {
     this.setState({ page, pageParams });
   };
 
-  getRecordsByDeckId = (deckId) => {
-    return Object.values(this.state.recordsById).filter(
-      (record) => record.deckId === deckId,
-    );
-  };
-
   importData = (data) => {
     this.setState(JSON.parse(data));
   };
@@ -150,38 +108,56 @@ export class App extends React.Component {
         ...restDecksById
       } = prevState.decksById;
 
-      const recordsByDeckId = this.getRecordsByDeckId(
-        deck.id,
-      );
-      const learnedRecordsByDeckId = recordsByDeckId.filter(
-        isRecordLearned,
-      );
+      const getRecordsByIdWithoutDeck = () => {
+        const recordsByIdCopy = {
+          ...prevState.recordsById,
+        };
+
+        deck.recordsIds.forEach((recordId) => {
+          delete recordsByIdCopy[recordId];
+        });
+
+        return recordsByIdCopy;
+      };
 
       return {
         appData: {
           ...prevState.appData,
 
           decksCount: prevState.appData.decksCount - 1,
-          learnedDeckssCount: isDeckLearned(deck)
+          learnedDecksCount: isDeckLearned(deck)
             ? prevState.appData.learnedDecksCount - 1
             : prevState.appData.learnedDecksCount,
 
           recordsCount:
             prevState.appData.decksCount -
-            recordsByDeckId.length,
+            deck.recordsIds.length,
           learnedRecordsCount:
             prevState.appData.learnedRecordsCount -
-            learnedRecordsByDeckId.length,
+            deck.learnedRecordsIds.length,
         },
         decksById: restDecksById,
-        recordsById: Object.fromEntries(
-          Object.entries(prevState.recordsById).filter(
-            ([recordId, record]) =>
-              record.deckId !== deck.id,
-          ),
-        ),
+        recordsById: getRecordsByIdWithoutDeck(),
       };
     });
+  };
+
+  getRecordsByDeckId = (deckId) => {
+    const { recordsIds } = this.state.decksById[deckId];
+
+    return recordsIds.map(
+      (recordId) => this.state.recordsById[recordId],
+    );
+  };
+
+  getLearnedRecordsByDeckId = (deckId) => {
+    const { learnedRecordsIds } = this.state.decksById[
+      deckId
+    ];
+
+    return learnedRecordsIds.map(
+      (recordId) => this.state.recordsById[recordId],
+    );
   };
 
   createRecord = ({ firstSide, secondSide, deckId }) => {
@@ -201,8 +177,10 @@ export class App extends React.Component {
           ...prevState.decksById,
           [deckId]: {
             ...prevState.decksById[deckId],
-            recordsCount:
-              prevState.decksById[deckId].recordsCount + 1,
+
+            recordsIds: prevState.decksById[
+              deckId
+            ].recordsIds.concat([newRecord.id]),
           },
         },
         recordsById: {
@@ -235,13 +213,14 @@ export class App extends React.Component {
           [deckId]: {
             ...prevState.decksById[deckId],
 
-            recordsCount:
-              prevState.decksById[deckId].recordsCount - 1,
-            learnedRecordsCount: isRecordLearned(record)
-              ? prevState.decksById[deckId]
-                  .learnedRecordsCount - 1
-              : prevState.decksById[deckId]
-                  .learnedRecordsCount,
+            recordsIds: prevState.decksById[
+              deckId
+            ].recordsIds.filter((id) => id !== record.id),
+            learnedRecordsIds: prevState.decksById[
+              deckId
+            ].learnedRecordsIds.filter(
+              (id) => id !== record.id,
+            ),
           },
         },
         recordsById: restRecordsById,
