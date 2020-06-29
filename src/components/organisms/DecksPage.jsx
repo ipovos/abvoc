@@ -41,6 +41,17 @@ export class DecksPage extends React.Component {
     return query.length > 0 && query.length < 2;
   };
 
+  onFileChange = (event) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      console.log(JSON.parse(event.target.result));
+    };
+
+    if (event.target.files.length > 0) {
+      reader.readAsText(event.target.files[0]);
+    }
+  };
+
   getFilteredDecks = () => {
     const { hasValidationError, query } = this.state;
     const { decks } = this.props;
@@ -57,21 +68,35 @@ export class DecksPage extends React.Component {
   };
 
   render() {
-    const { appData, onPageChange } = this.props;
+    const {
+      appData,
+      onPageChange,
+      onDataImport,
+      onDataExport,
+      onDataReset,
+    } = this.props;
     const { validationError, query } = this.state;
     const filteredDecks = this.getFilteredDecks();
 
     return (
       <Container>
-        <AppTile appData={appData} />
-        <Tile>
-          <SearchForm
-            caption="to search sets"
-            value={query}
-            onChange={this.onQueryChange}
-            validationError={validationError}
-          />
-        </Tile>
+        <AppTile
+          appData={appData}
+          onDataImport={onDataImport}
+          onDataExport={onDataExport}
+          onDataReset={onDataReset}
+        />
+
+        {filteredDecks.length > 0 && (
+          <Tile>
+            <SearchForm
+              caption="to search sets"
+              value={query}
+              onChange={this.onQueryChange}
+              validationError={validationError}
+            />
+          </Tile>
+        )}
 
         {filteredDecks.map((deck) => (
           <DeckTile
@@ -85,7 +110,8 @@ export class DecksPage extends React.Component {
             }
           />
         ))}
-        {filteredDecks?.length === 0 && (
+
+        {filteredDecks.length === 0 && query.length > 0 && (
           <NotFoundTile
             caption={
               <>

@@ -3,13 +3,13 @@ import React from 'react';
 import { colors } from '../../shared/styles';
 
 export const Button = ({
+  look,
   wide = false,
   type = 'button',
-  look,
   ...restProps
 }) => {
   const mainStyle = {
-    display: 'block',
+    display: 'inline-block',
     width: wide ? '100%' : 'initial',
     fontSize: '1em',
     borderRadius: '1.3em',
@@ -27,9 +27,11 @@ export const Button = ({
     color: '#fff',
     fontStyle: 'italic',
   };
+
   return (
     <button
       {...restProps}
+      type={type}
       style={{
         ...mainStyle,
         ...(look === 'purple' ? purpleStyle : {}),

@@ -98,3 +98,10 @@ export let wordsIdsByDeckId = {
   '1': ['3', '4'],
   '2': ['5', '6', '7', '8', '9', '10'],
 };
+
+window.data = {
+  appData,
+  decksById,
+  wordsById,
+  wordsIdsByDeckId,
+};
