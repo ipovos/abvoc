@@ -130,7 +130,7 @@ export class App extends React.Component {
             : prevState.appData.learnedDecksCount,
 
           recordsCount:
-            prevState.appData.decksCount -
+            prevState.appData.recordsCount -
             deck.recordsIds.length,
           learnedRecordsCount:
             prevState.appData.learnedRecordsCount -
