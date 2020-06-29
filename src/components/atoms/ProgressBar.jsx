@@ -57,6 +57,7 @@ export const ProgressBar = ({
             colored,
           ),
           width: `${Math.min(percent, 100)}%`,
+          transition: 'width .1s ease-in-out'
         }}
       />
     </div>

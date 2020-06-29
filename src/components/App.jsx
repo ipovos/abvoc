@@ -2,6 +2,7 @@ import React from 'react';
 
 import { DecksPage } from './organisms/DecksPage';
 import { DeckPage } from './organisms/DeckPage';
+import { TrainPage } from './organisms/TrainPage';
 
 import * as store from '../shared/store';
 
@@ -34,11 +35,14 @@ export class App extends React.Component {
       appData,
       decksById,
     } = this.state;
+
+    const router = { params: pageParams };
+
     return (
       <>
         {page === 'decks' && (
           <DecksPage
-            router={{ params: pageParams }}
+            router={router}
             onPageChange={this.changePage}
             appData={appData}
             decks={Object.values(decksById)}
@@ -46,7 +50,15 @@ export class App extends React.Component {
         )}
         {page === 'deck' && (
           <DeckPage
-            router={{ params: pageParams }}
+            router={router}
+            deck={decksById[pageParams.deckId]}
+            words={this.getWordsByDeckId(pageParams.deckId)}
+            onPageChange={this.changePage}
+          />
+        )}
+        {page === 'train' && (
+          <TrainPage
+            router={router}
             deck={decksById[pageParams.deckId]}
             words={this.getWordsByDeckId(pageParams.deckId)}
             onPageChange={this.changePage}
